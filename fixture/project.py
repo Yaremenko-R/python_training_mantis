@@ -1,4 +1,5 @@
 from selenium.webdriver.support.select import Select
+from model.project import Project
 
 
 class ProjectHelper:
@@ -49,12 +50,27 @@ class ProjectHelper:
         self.fill_select_info("status", project.status)
         self.fill_select_info("view_state", project.view_state)
 
-    def select_project_by_index(self, index):
+    def select_project_by_name(self, name):
         wd = self.app.wd
+        wd.find_element_by_link_text(name).click()
 
-    def delete_project_by_index(self, index):
+    def delete_project_by_name(self, name):
         wd = self.app.wd
         self.open_manage_project_page()
-        self.select_project_by_index(index)
-        wd.find_element_by_name("delete").click()
+        self.select_project_by_name(name)
+        wd.find_element_by_xpath("//input[@value='Delete Project']").click()
+        wd.find_element_by_xpath("//input[@value='Delete Project']").click()
         self.return_to_manage_project_page()
+
+    project_cache = None
+
+    def get_project_list(self):
+        if self.project_cache is None:
+            wd = self.app.wd
+            self.open_manage_project_page()
+            self.project_cache = []
+            for element in wd.find_element_by_name:
+                id = element.find_element_by_name()
+                name = element.find_element_by_name()
+                self.project_cache.append(Project(id=id, name=name))
+        return list(self.project_cache)
